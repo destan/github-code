@@ -1,0 +1,138 @@
+:host {
+  --border-color: #d0d7de;
+  --header-background: #f6f8fa;
+  --header-text-color: #24292f;
+  --line-number-color: #57606a;
+  --tab-color: #57606a;
+  --tab-hover-border: #d0d7de;
+  --tabs-background: #f6f8fa;
+  --code-background: #ffffff;
+  --skeleton-base: #e0e0e0;
+  --skeleton-highlight: #f0f0f0;
+  --error-text-color: #cf222e;
+  --error-background: #ffebe9;
+  --error-border: #ff8182;
+  --button-background: #f6f8fa;
+  --button-text-color: #24292f;
+  --button-border: #d0d7de;
+  --button-hover-background: #f3f4f6;
+  --font-family-base:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  --font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  display: block;
+  min-width: 0;
+  font-family: var(--font-family-base);
+}
+
+article {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--code-background);
+}
+
+header {
+  background-color: var(--header-background);
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--header-text-color);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.code-wrapper {
+  width: 100%;
+  margin: 0;
+  overflow-x: auto;
+  background-color: var(--code-background);
+}
+
+.code-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.code-row {
+  display: flex;
+}
+
+.line-number {
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 6px;
+  padding-left: 8px;
+  color: var(--line-number-color);
+  user-select: none;
+  border-right: 1px solid var(--border-color);
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  line-height: 20px;
+  min-width: 40px;
+}
+
+.code-cell {
+  flex: 1;
+  min-width: 0;
+  padding-left: 2px;
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  line-height: 20px;
+  white-space: pre;
+}
+
+.error {
+  padding: 16px;
+  color: var(--error-text-color);
+  background-color: var(--error-background);
+  border: 1px solid var(--error-border);
+  border-radius: 6px;
+  font-family: var(--font-family-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 16px;
+}
+
+.retry-button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: var(--button-background);
+  color: var(--button-text-color);
+  border: 1px solid var(--button-border);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.retry-button:hover {
+  background-color: var(--button-hover-background);
+}
+
+/* Skeleton loader styles */
+.skeleton-line {
+  height: 12px;
+  background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-highlight) 50%, var(--skeleton-base) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  margin: 4px 0;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-loading .line-number {
+  opacity: 0.3;
+}

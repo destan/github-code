@@ -1,0 +1,87 @@
+= github-code
+:toc:
+
+image:https://img.shields.io/npm/v/github-code[npm version,link=https://www.npmjs.com/package/github-code]
+image:https://img.shields.io/npm/l/github-code[License]
+image:https://img.shields.io/badge/highlight.js-syntax%20highlighting-blue[highlight.js]
+
+A web component for displaying GitHub files with syntax highlighting.
+
+== Installation
+
+Include the script in your HTML:
+
+[source,html]
+----
+<script type="module" src="https://cdn.jsdelivr.net/npm/github-code/dist/github-code.min.js"></script>
+----
+
+Or install via npm:
+
+[source,bash]
+----
+npm install github-code
+----
+
+== Usage
+
+=== Single File
+
+[source,html]
+----
+<github-code
+  file="https://github.com/owner/repo/blob/main/src/example.ts">
+</github-code>
+----
+
+=== Multiple Files (Tabbed)
+
+Comma-separate URLs to display files as tabs:
+
+[source,html]
+----
+<github-code
+  file="https://github.com/owner/repo/blob/main/src/app.ts,
+        https://github.com/owner/repo/blob/main/src/utils.ts">
+</github-code>
+----
+
+== Attributes
+
+[cols="1,1,3"]
+|===
+| Attribute | Default | Description
+
+| `file` | _(required)_ | GitHub blob URL(s). Comma-separated for multiple files.
+| `theme` | `auto` | `light`, `dark`, or `auto` (follows system preference)
+|===
+
+== URL Format
+
+URLs must be GitHub blob URLs:
+
+----
+https://github.com/{owner}/{repo}/blob/{branch|commit}/{path}
+----
+
+== Features
+
+* Syntax highlighting via highlight.js (auto-detected language)
+* Lazy loading (content fetched on demand)
+* Keyboard-accessible tabs (Arrow keys, Home, End)
+* CSP-compliant (no inline styles)
+* Shadow DOM encapsulation
+
+== Development
+
+[source,bash]
+----
+npm install
+npm run build          # Build dist files
+npm run dev            # Watch mode
+npm run test:ci        # Full CI check (lint + typecheck + build + tests)
+----
+
+== License
+
+MIT

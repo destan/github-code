@@ -1,0 +1,52 @@
+{
+  "name": "github-code",
+  "version": "0.1.0",
+  "description": "Custom element for embedding GitHub source files with syntax highlighting",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "pretest:e2e": "npm run build",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:all": "npm run test:coverage && npm run test:e2e",
+    "test:ci": "npm run lint && npm run type-check && npm run build && npm run test:all"
+  },
+  "keywords": [
+    "web-component",
+    "github",
+    "code",
+    "syntax-highlighting"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.2",
+    "@vitest/coverage-v8": "^4.0.15",
+    "@vitest/ui": "^4.0.15",
+    "esbuild": "0.27.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "happy-dom": "^20.0.11",
+    "prettier": "^3.7.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.50.0",
+    "vitest": "^4.0.15"
+  },
+  "engines": {
+    "node": ">=24.12.0"
+  }
+}

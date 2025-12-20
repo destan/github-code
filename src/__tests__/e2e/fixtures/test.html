@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E2E Test Fixture</title>
+    <script type="module" src="../../../../dist/github-code.js"></script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .test-section {
+        margin-bottom: 40px;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #24292f;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>E2E Test Fixture</h1>
+
+    <div class="test-section">
+      <h2>Single File Component</h2>
+      <github-code
+        id="single-file-component"
+        file="https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt"
+      >
+      </github-code>
+    </div>
+
+    <div class="test-section">
+      <h2>Multi-File Component (3 tabs)</h2>
+      <github-code
+        id="multi-file-component"
+        file="https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt,
+                      https://github.com/spring-projects/spring-framework/blob/3b1fa369b4d1a8b71d367393eacacf7b4fbea134/spring-beans/src/main/kotlin/org/springframework/beans/factory/ListableBeanFactoryExtensions.kt,
+                      https://github.com/destan/2023-10-23-spring/blob/738c1179f34cd7039409a02386e80a9a6e0113e8/src/main/java/com/example/demo/jwt_security/JwtAuthentication.java"
+      >
+      </github-code>
+    </div>
+
+    <div class="test-section">
+      <h2>Dark Theme Component</h2>
+      <github-code
+        id="dark-theme-component"
+        theme="dark"
+        file="https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt"
+      >
+      </github-code>
+    </div>
+
+    <div class="test-section">
+      <h2>Light Theme Component</h2>
+      <github-code
+        id="light-theme-component"
+        theme="light"
+        file="https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt"
+      >
+      </github-code>
+    </div>
+
+    <div class="test-section">
+      <h2>Error: Missing File Attribute</h2>
+      <github-code id="error-missing-component"></github-code>
+    </div>
+
+    <div class="test-section">
+      <h2>Error: Invalid URL</h2>
+      <github-code id="error-invalid-component" file="https://invalid-url-format.com/file.ts"> </github-code>
+    </div>
+
+    <div class="test-section">
+      <h2>Dynamic Component</h2>
+      <github-code
+        id="dynamic-component"
+        file="https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt"
+      >
+      </github-code>
+      <button id="change-file-btn">Change File</button>
+      <button id="change-to-tabs-btn">Change to Tabs</button>
+    </div>
+
+    <div class="test-section">
+      <h2>Layout Component</h2>
+      <github-code
+        id="layout-component"
+        theme="dark"
+        file="https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt"
+      >
+      </github-code>
+    </div>
+
+    <script>
+      // Button handlers for dynamic attribute change tests
+      document.getElementById('change-file-btn')?.addEventListener('click', () => {
+        const component = document.getElementById('dynamic-component');
+        if (component) {
+          component.setAttribute(
+            'file',
+            'https://github.com/spring-projects/spring-framework/blob/3b1fa369b4d1a8b71d367393eacacf7b4fbea134/spring-beans/src/main/kotlin/org/springframework/beans/factory/ListableBeanFactoryExtensions.kt'
+          );
+        }
+      });
+
+      document.getElementById('change-to-tabs-btn')?.addEventListener('click', () => {
+        const component = document.getElementById('dynamic-component');
+        if (component) {
+          component.setAttribute(
+            'file',
+            'https://github.com/spring-projects/spring-framework/blob/v6.2.10/spring-beans/src/main/kotlin/org/springframework/beans/factory/BeanFactoryExtensions.kt,' +
+              'https://github.com/spring-projects/spring-framework/blob/3b1fa369b4d1a8b71d367393eacacf7b4fbea134/spring-beans/src/main/kotlin/org/springframework/beans/factory/ListableBeanFactoryExtensions.kt'
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
