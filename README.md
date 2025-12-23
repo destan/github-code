@@ -7,6 +7,10 @@
 
 A web component for displaying GitHub files with syntax highlighting.
 
+## Demo
+
+See the live demo: **[github-code Demo](https://destan.github.io/github-code/)**
+
 ## Installation
 
 Include the script in your HTML:

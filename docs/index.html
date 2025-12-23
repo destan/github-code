@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>github-code Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/github-code@0.1.0/dist/github-code.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>&lt;github-code&gt;</h1>
+      <p class="description">A web component for displaying GitHub files with syntax highlighting.</p>
+      <div class="badges">
+        <span class="version-badge">Demo using v0.1.0</span>
+        <a href="https://github.com/destan/github-code" class="github-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/package/github-code" class="npm-link" target="_blank" rel="noopener">npm</a>
+      </div>
+      <div class="install-command">
+        <code>npm install github-code</code>
+      </div>
+    </header>
+
+    <!-- Theme Controls -->
+    <section class="theme-controls">
+      <div class="theme-buttons">
+        <button class="theme-btn active" data-theme="auto">Auto</button>
+        <button class="theme-btn" data-theme="light">Light</button>
+        <button class="theme-btn" data-theme="dark">Dark</button>
+      </div>
+      <p class="system-pref" id="system-pref">Your system preference: light</p>
+    </section>
+
+    <!-- Demo: Single File -->
+    <section class="demo-section">
+      <h2>Basic Usage</h2>
+      <p>Display a single file from GitHub with automatic syntax highlighting.</p>
+
+      <h3>Code</h3>
+      <pre><code>&lt;github-code
+  file="https://github.com/destan/github-code/blob/609b710/src/rendering/html-generators.ts"
+&gt;&lt;/github-code&gt;</code></pre>
+
+      <h3>Result</h3>
+      <div class="demo-result">
+        <github-code
+          file="https://github.com/destan/github-code/blob/609b710b6005b4ac8b23831fa77a862e9b25d922/src/rendering/html-generators.ts"
+        ></github-code>
+      </div>
+    </section>
+
+    <!-- Demo: Multiple Files -->
+    <section class="demo-section">
+      <h2>Multiple Files (Tabs)</h2>
+      <p>Display multiple files as tabs by separating URLs with commas.</p>
+
+      <h3>Code</h3>
+      <pre><code>&lt;github-code
+  file="https://github.com/spring-projects/spring-security/blob/6d6552a/core/.../AbstractAuthenticationToken.java,
+        https://github.com/spring-projects/spring-security/blob/6d6552a/javascript/lib/abort-controller.js"
+&gt;&lt;/github-code&gt;</code></pre>
+
+      <h3>Result</h3>
+      <div class="demo-result">
+        <github-code
+          file="https://github.com/spring-projects/spring-security/blob/6d6552a602b5b57fdceb8188797b55154542ed40/core/src/main/java/org/springframework/security/authentication/AbstractAuthenticationToken.java,
+                https://github.com/spring-projects/spring-security/blob/6d6552a602b5b57fdceb8188797b55154542ed40/javascript/lib/abort-controller.js"
+        ></github-code>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>MIT License | <a href="https://github.com/destan/github-code" target="_blank" rel="noopener">View on GitHub</a></p>
+    </footer>
+  </div>
+
+  <script>
+    // Theme management
+    let currentTheme = 'auto';
+
+    function getSystemPreference() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function updateSystemPreferenceDisplay() {
+      const pref = getSystemPreference();
+      document.getElementById('system-pref').textContent = `Your system preference: ${pref}`;
+    }
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+
+      // Update all github-code components
+      document.querySelectorAll('github-code').forEach(el => {
+        el.setAttribute('theme', theme);
+      });
+
+      // Update page theme
+      const resolved = theme === 'auto' ? getSystemPreference() : theme;
+      document.body.dataset.theme = resolved;
+
+      // Update button states
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+      });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSystemPreferenceDisplay();
+      applyTheme('auto');
+
+      // Theme button clicks
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyTheme(btn.dataset.theme);
+        });
+      });
+
+      // Listen for system preference changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        updateSystemPreferenceDisplay();
+        if (currentTheme === 'auto') {
+          applyTheme('auto');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
