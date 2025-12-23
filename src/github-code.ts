@@ -56,7 +56,7 @@ export class GitHubCode extends HTMLElement {
   }
 
   static get observedAttributes(): string[] {
-    return ['file'];
+    return ['file', 'theme'];
   }
 
   connectedCallback(): void {
@@ -76,7 +76,11 @@ export class GitHubCode extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     // Skip initial attribute set (oldValue is null) - connectedCallback handles initial render
-    if (name === 'file' && oldValue !== null && oldValue !== newValue) {
+    if (oldValue === null || oldValue === newValue) {
+      return;
+    }
+
+    if (name === 'file') {
       // Store current active tab index before re-parsing files
       const previousIndex = this.#tabState.getActiveTabIndex();
 
@@ -93,6 +97,9 @@ export class GitHubCode extends HTMLElement {
         // Reset to first tab if previous index no longer exists
         this.#tabState.setActiveTabIndex(0);
       }
+    } else if (name === 'theme') {
+      this.#resolvedTheme = null; // Clear cached theme
+      void this.#render();
     }
   }
 

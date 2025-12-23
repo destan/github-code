@@ -57,9 +57,9 @@ describe('GitHubCode Integration Tests', () => {
       expect(element.shadowRoot!.mode).toBe('open');
     });
 
-    it('should observe "file" attribute', () => {
+    it('should observe "file" and "theme" attributes', () => {
       const observed = (GitHubCode as any).observedAttributes;
-      expect(observed).toEqual(['file']);
+      expect(observed).toEqual(['file', 'theme']);
     });
 
     it('should set up theme listener on connectedCallback', () => {
