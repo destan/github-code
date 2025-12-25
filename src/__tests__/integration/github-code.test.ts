@@ -575,4 +575,69 @@ describe('GitHubCode Integration Tests', () => {
       element.remove();
     });
   });
+
+  describe('GitHubCode.info static property', () => {
+    it('should expose version from package.json', () => {
+      const info = GitHubCode.info;
+      expect(info.version).toMatch(/^\d+\.\d+\.\d+/);
+      expect(typeof info.version).toBe('string');
+    });
+
+    it('should expose highlightjsUrl', () => {
+      const info = GitHubCode.info;
+      expect(typeof info.highlightjsUrl).toBe('string');
+    });
+
+    it('should expose highlightjsSource', () => {
+      const info = GitHubCode.info;
+      expect(['user-provided', 'cdn-default', 'global']).toContain(info.highlightjsSource);
+    });
+
+    it('should be accessible before component instantiation', () => {
+      expect(GitHubCode.info).toBeDefined();
+      expect(typeof GitHubCode.info).toBe('object');
+    });
+  });
+
+  describe('highlightjs-url attribute', () => {
+    it('should treat "auto" as default behavior', async () => {
+      element.setAttribute('file', 'https://github.com/owner/repo/blob/main/test.ts');
+      element.setAttribute('highlightjs-url', 'auto');
+
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'const x = 1;',
+      });
+
+      document.body.appendChild(element);
+
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      // Should use default behavior (cdn-default or global)
+      const info = GitHubCode.info;
+      expect(['cdn-default', 'global']).toContain(info.highlightjsSource);
+
+      element.remove();
+    });
+
+    it('should accept empty attribute as default', async () => {
+      element.setAttribute('file', 'https://github.com/owner/repo/blob/main/test.ts');
+      element.setAttribute('highlightjs-url', '');
+
+      (global.fetch as any).mockResolvedValueOnce({
+        ok: true,
+        text: async () => 'const x = 1;',
+      });
+
+      document.body.appendChild(element);
+
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      // Should use default behavior
+      const info = GitHubCode.info;
+      expect(['cdn-default', 'global']).toContain(info.highlightjsSource);
+
+      element.remove();
+    });
+  });
 });
