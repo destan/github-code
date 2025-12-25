@@ -35,3 +35,20 @@ export type Theme = 'light' | 'dark' | 'auto';
  * Resolved theme (either light or dark, never auto)
  */
 export type ResolvedTheme = 'light' | 'dark';
+
+/**
+ * Source of the loaded highlight.js library
+ */
+export type HighlightJSSource = 'user-provided' | 'cdn-default' | 'global';
+
+/**
+ * Runtime information about the GitHubCode component
+ */
+export interface GitHubCodeInfo {
+  /** Package version from package.json */
+  version: string;
+  /** The highlight.js URL that was loaded (or "auto" if using default) */
+  highlightjsUrl: string;
+  /** Source of the highlight.js library */
+  highlightjsSource: HighlightJSSource;
+}

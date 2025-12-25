@@ -1,8 +1,9 @@
-import type { FileMetadata, ResolvedTheme } from './types';
+import type { FileMetadata, ResolvedTheme, GitHubCodeInfo } from './types';
 import { parseFileAttribute } from './parsers/file-parser';
 import { isValidGitHubUrl, parseGitHubUrl, extractFilenameFromUrl } from './parsers/url-parser';
 import { ensureFileLoaded } from './fetching/code-fetcher';
-import { loadHighlightJS } from './fetching/highlightjs-loader';
+import { loadHighlightJS, getLoadedHighlightJSUrl, getHighlightJSSource } from './fetching/highlightjs-loader';
+import packageJson from '../package.json';
 import { StylesheetManager } from './styles/stylesheet-manager';
 import {
   escapeHtml,
@@ -56,7 +57,18 @@ export class GitHubCode extends HTMLElement {
   }
 
   static get observedAttributes(): string[] {
-    return ['file'];
+    return ['file', 'theme'];
+  }
+
+  /**
+   * Runtime information about the component and loaded libraries
+   */
+  static get info(): GitHubCodeInfo {
+    return {
+      version: packageJson.version,
+      highlightjsUrl: getLoadedHighlightJSUrl(),
+      highlightjsSource: getHighlightJSSource(),
+    };
   }
 
   connectedCallback(): void {
@@ -76,7 +88,11 @@ export class GitHubCode extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     // Skip initial attribute set (oldValue is null) - connectedCallback handles initial render
-    if (name === 'file' && oldValue !== null && oldValue !== newValue) {
+    if (oldValue === null || oldValue === newValue) {
+      return;
+    }
+
+    if (name === 'file') {
       // Store current active tab index before re-parsing files
       const previousIndex = this.#tabState.getActiveTabIndex();
 
@@ -93,6 +109,9 @@ export class GitHubCode extends HTMLElement {
         // Reset to first tab if previous index no longer exists
         this.#tabState.setActiveTabIndex(0);
       }
+    } else if (name === 'theme') {
+      this.#resolvedTheme = null; // Clear cached theme
+      void this.#render();
     }
   }
 
@@ -204,7 +223,11 @@ export class GitHubCode extends HTMLElement {
 
     // Load highlight.js in background (UI already visible)
     try {
-      await loadHighlightJS();
+      // Read custom URL attribute (treat "auto" as default)
+      const customUrlAttr = this.getAttribute('highlightjs-url');
+      const customUrl = customUrlAttr && customUrlAttr !== 'auto' ? customUrlAttr : undefined;
+
+      await loadHighlightJS(customUrl);
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       this.#showError(`Error loading highlight.js: ${errorMsg}`);

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>github-code Demo</title>
   <link rel="stylesheet" href="styles.css">
-  <script type="module" src="https://cdn.jsdelivr.net/npm/github-code@0.1.0/dist/github-code.min.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/github-code@latest/dist/github-code.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -14,7 +14,7 @@
       <h1>&lt;github-code&gt;</h1>
       <p class="description">A web component for displaying GitHub files with syntax highlighting.</p>
       <div class="badges">
-        <span class="version-badge">Demo using v0.1.0</span>
+        <span class="version-badge" id="version-badge">Demo using v...</span>
         <a href="https://github.com/destan/github-code" class="github-link" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.npmjs.com/package/github-code" class="npm-link" target="_blank" rel="noopener">npm</a>
       </div>
@@ -108,10 +108,24 @@
       });
     }
 
+    // Fetch and display the current version from jsdelivr
+    async function fetchVersion() {
+      try {
+        const response = await fetch('https://data.jsdelivr.com/v1/package/npm/github-code');
+        const data = await response.json();
+        const version = data.tags?.latest || data.versions?.[0] || 'unknown';
+        document.getElementById('version-badge').textContent = `Demo using v${version}`;
+      } catch (error) {
+        console.error('Failed to fetch version:', error);
+        document.getElementById('version-badge').textContent = 'Demo using latest';
+      }
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       updateSystemPreferenceDisplay();
       applyTheme('auto');
+      fetchVersion();
 
       // Theme button clicks
       document.querySelectorAll('.theme-btn').forEach(btn => {
