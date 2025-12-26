@@ -23,12 +23,22 @@
       </div>
     </header>
 
-    <!-- Theme Controls -->
-    <section class="theme-controls">
-      <div class="theme-buttons">
-        <button class="theme-btn active" data-theme="auto">Auto</button>
-        <button class="theme-btn" data-theme="light">Light</button>
-        <button class="theme-btn" data-theme="dark">Dark</button>
+    <!-- Controls -->
+    <section class="controls-section">
+      <div class="controls-row">
+        <div class="button-group">
+          <button class="group-btn active" data-theme="auto">Auto</button>
+          <button class="group-btn" data-theme="light">Light</button>
+          <button class="group-btn" data-theme="dark">Dark</button>
+        </div>
+        <div class="input-group">
+          <label for="height-toggle">
+            <input type="checkbox" id="height-toggle">
+            Fix height to
+          </label>
+          <input type="number" id="height-value" value="300" min="100" max="2000">
+          <span class="input-suffix">px</span>
+        </div>
       </div>
       <p class="system-pref" id="system-pref">Your system preference: light</p>
     </section>
@@ -103,8 +113,21 @@
       document.body.dataset.theme = resolved;
 
       // Update button states
-      document.querySelectorAll('.theme-btn').forEach(btn => {
+      document.querySelectorAll('.button-group .group-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.theme === theme);
+      });
+    }
+
+    // Height constraint management
+    function applyHeightConstraint(enabled, height) {
+      document.querySelectorAll('.demo-result').forEach(el => {
+        if (enabled) {
+          el.classList.add('height-constrained');
+          el.style.maxHeight = `${height}px`;
+        } else {
+          el.classList.remove('height-constrained');
+          el.style.maxHeight = '';
+        }
       });
     }
 
@@ -127,11 +150,26 @@
       applyTheme('auto');
       fetchVersion();
 
+      const heightToggle = document.getElementById('height-toggle');
+      const heightValue = document.getElementById('height-value');
+
       // Theme button clicks
-      document.querySelectorAll('.theme-btn').forEach(btn => {
+      document.querySelectorAll('.button-group .group-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           applyTheme(btn.dataset.theme);
         });
+      });
+
+      // Height constraint toggle
+      heightToggle.addEventListener('change', () => {
+        applyHeightConstraint(heightToggle.checked, parseInt(heightValue.value, 10));
+      });
+
+      // Height value input
+      heightValue.addEventListener('input', () => {
+        if (heightToggle.checked) {
+          applyHeightConstraint(true, parseInt(heightValue.value, 10));
+        }
       });
 
       // Listen for system preference changes
