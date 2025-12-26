@@ -254,4 +254,50 @@ test.describe('Theme Support', () => {
 
     expect(isMinified).toBe(true);
   });
+
+  test('should preserve multi-file content when switching theme', async ({ page }) => {
+    const component = page.locator('#multi-file-component');
+
+    // First set a theme so we have a baseline (simulates demo page behavior)
+    await component.evaluate((el) => {
+      el.setAttribute('theme', 'light');
+    });
+
+    // Wait for content to fully load
+    await page.waitForTimeout(3000);
+
+    // Verify content is loaded (not skeleton)
+    const contentBeforeThemeChange = await component.evaluate((el) => {
+      const panel = el.shadowRoot?.querySelector('section[role="tabpanel"]');
+      const hasSkeleton = panel?.querySelector('.skeleton') !== null;
+      const hasCode = panel?.querySelector('.code-cell') !== null;
+      const stylesheetHref = el.shadowRoot?.querySelector('link')?.getAttribute('href') || '';
+      return { hasSkeleton, hasCode, stylesheetHref };
+    });
+
+    expect(contentBeforeThemeChange.hasCode).toBe(true);
+    expect(contentBeforeThemeChange.hasSkeleton).toBe(false);
+    expect(contentBeforeThemeChange.stylesheetHref).toContain('github.min.css');
+    expect(contentBeforeThemeChange.stylesheetHref).not.toContain('github-dark');
+
+    // Change theme from light to dark
+    await component.evaluate((el) => {
+      el.setAttribute('theme', 'dark');
+    });
+
+    await page.waitForTimeout(500);
+
+    // Verify content is still visible (not reverted to skeleton)
+    const contentAfterThemeChange = await component.evaluate((el) => {
+      const panel = el.shadowRoot?.querySelector('section[role="tabpanel"]');
+      const hasSkeleton = panel?.querySelector('.skeleton') !== null;
+      const hasCode = panel?.querySelector('.code-cell') !== null;
+      const stylesheetHref = el.shadowRoot?.querySelector('link')?.getAttribute('href') || '';
+      return { hasSkeleton, hasCode, stylesheetHref };
+    });
+
+    expect(contentAfterThemeChange.hasCode).toBe(true);
+    expect(contentAfterThemeChange.hasSkeleton).toBe(false);
+    expect(contentAfterThemeChange.stylesheetHref).toContain('github-dark');
+  });
 });
