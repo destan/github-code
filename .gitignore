@@ -1,8 +1,6 @@
 # Test Results
 test-results/
 playwright-report/
-*.png
-*.jpeg
 
 # Coverage Reports
 coverage/
