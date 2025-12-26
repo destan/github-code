@@ -111,7 +111,7 @@ export class GitHubCode extends HTMLElement {
       }
     } else if (name === 'theme') {
       this.#resolvedTheme = null; // Clear cached theme
-      void this.#render();
+      this.#updateThemeOnly(); // Just update styles, preserve loaded content
     }
   }
 
@@ -121,10 +121,25 @@ export class GitHubCode extends HTMLElement {
       this.#themeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       this.#themeChangeHandler = () => {
         this.#resolvedTheme = null; // Clear cached theme
-        void this.#render(); // Re-render with new theme
+        this.#updateThemeOnly(); // Update styles without re-rendering
       };
       this.#themeMediaQuery.addEventListener('change', this.#themeChangeHandler);
     }
+  }
+
+  #updateThemeOnly(): void {
+    // Update the highlight.js theme stylesheet link
+    const theme = this.#getResolvedTheme();
+    const themeUrl = StylesheetManager.getHighlightJSThemeUrl(theme);
+
+    const link = this.shadowRoot?.querySelector('link[rel="stylesheet"]');
+    if (link) {
+      link.setAttribute('href', themeUrl);
+    }
+
+    // Re-apply constructable stylesheets with new theme
+    const hasTabs = this.#files.length > 1;
+    this.#applyStyleSheets(hasTabs);
   }
 
   #getResolvedTheme(): ResolvedTheme {
