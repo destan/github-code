@@ -120,12 +120,12 @@ body[data-theme="dark"] {
   font-size: 0.9rem;
 }
 
-/* Theme Controls */
-.theme-controls {
+/* Controls Section */
+.controls-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   margin-bottom: 2rem;
   padding: 1rem;
   background-color: var(--bg-secondary);
@@ -133,31 +133,112 @@ body[data-theme="dark"] {
   border-radius: 6px;
 }
 
-.theme-buttons {
+.controls-row {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.theme-btn {
+/* Button Group */
+.button-group {
+  display: flex;
+}
+
+.button-group .group-btn {
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-primary);
   background-color: var(--btn-bg);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
 }
 
-.theme-btn:hover {
-  background-color: var(--btn-hover-bg);
+.button-group .group-btn:first-child {
+  border-radius: 6px 0 0 6px;
 }
 
-.theme-btn.active {
+.button-group .group-btn:last-child {
+  border-radius: 0 6px 6px 0;
+}
+
+.button-group .group-btn:not(:first-child) {
+  margin-left: -1px;
+}
+
+.button-group .group-btn:hover {
+  background-color: var(--btn-hover-bg);
+  z-index: 1;
+}
+
+.button-group .group-btn.active {
   background-color: var(--btn-active-bg);
   color: var(--btn-active-text);
   border-color: var(--btn-active-bg);
+  z-index: 2;
+}
+
+/* Input Group (checkbox + label + input + suffix) */
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--btn-bg);
+}
+
+.input-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.input-group input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  accent-color: var(--btn-active-bg);
+}
+
+.input-group input[type="number"] {
+  width: 4.5rem;
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: none;
+  border-left: 1px solid var(--border-color);
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.input-group input[type="number"]::-webkit-outer-spin-button,
+.input-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-group input[type="number"]:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--btn-active-bg);
+}
+
+.input-group .input-suffix {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background-color: var(--btn-bg);
+  border-left: 1px solid var(--border-color);
 }
 
 .system-pref {
@@ -216,6 +297,11 @@ body[data-theme="dark"] {
 
 .demo-result {
   margin-top: 0.5rem;
+  transition: max-height 0.3s ease;
+}
+
+.demo-result.height-constrained {
+  overflow: auto;
 }
 
 .demo-result github-code {
